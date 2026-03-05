@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Estructura e implementación de lenguajes</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'uca-primary': '#5c1b35', 
+                        'uca-secondary': '#ad9348', 
+                        'uca-light': '#fefcf8', 
+                        'uca-beige': '#f0e8d9', 
+                        'uca-guinda-light': '#8b3a5a' 
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 350px;
+            max-height: 400px;
+            padding-top: 1rem;
+            padding-bottom: 1rem;
+        }
+        .area-card {
+            background-color: #ffffff;
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            padding: 1.5rem;
+            border-top: 4px solid #ad9348;
+            transition: transform 0.2s ease;
+        }
+        .area-card:hover {
+            transform: translateY(-5px);
+        }
+    </style>
+</head>
+<body class="bg-uca-beige font-sans text-gray-800">
+
+    <header class="bg-uca-light shadow-lg sticky top-0 z-10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex flex-col md:flex-row justify-between items-center">
+            
+            <div class="flex items-center space-x-4 mb-4 md:mb-0">
+                <img src="imagenes/cintilloUNRC.png" 
+                    alt="Logo Universidad Rosario Castellanos" 
+                    class="h-10 w-auto"
+                    onerror="this.onerror=null;this.src='https://placehold.co/150x40/5c1b35/ad9348?text=UNRC+Logo';"
+                >
+            </div>
+
+            <h1 class="text-3xl sm:text-4xl font-black text-uca-primary text-center px-4 py-2 rounded-lg">
+                Estructura e implementación de lenguajes
+            </h1>
+            
+            <!-- Botón de Acción Inicio (Guinda) -->
+            <a href="index.html" class="bg-uca-primary hover:bg-opacity-90 text-white font-bold py-2 px-6 rounded-full shadow-md transition duration-300 transform hover:scale-105">
+                Inicio
+            </a>
+        </div>
+    </header>
+
+    <main class="container mx-auto max-w-6xl p-4 md:p-8 space-y-12">
+
+        <!-- Introducción -->
+        <section class="bg-white rounded-xl shadow-md p-8 border-l-8 border-uca-secondary">
+            <h2 class="text-2xl font-black text-uca-primary mb-4 italic">Investigación Profunda de Conceptos Nucleares</h2>
+            <div class="text-gray-700 leading-relaxed">
+                <p>
+                    Para comprender cómo una idea se transforma en software, debemos analizar los <strong>elementos formales</strong> que constituyen el lenguaje y los <strong>procesos técnicos</strong> que permiten su ejecución en el hardware. Esta investigación aborda desde la unidad mínima de información (alfabeto) hasta las complejas arquitecturas de implementación híbrida.
+                </p>
+            </div>
+        </section>
+
+        <!-- Sección 1.5: Elementos -->
+        <section class="space-y-8">
+            <div class="text-center">
+                <span class="text-uca-primary font-bold tracking-widest uppercase text-sm">Componentes del Lenguaje</span>
+                <h2 class="text-3xl font-black text-uca-primary underline decoration-uca-secondary decoration-4">Alfabeto, léxico y sintaxis</h2>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <!-- Jerarquía de Elementos -->
+                <div class="area-card">
+                    <h3 class="text-xl font-bold text-uca-primary mb-4">Jerarquía de Construcción</h3>
+                    <div class="flex flex-col items-center py-4">
+                        <div class="box-node bg-uca-beige">Alfabeto</div>
+                        <div class="text-xs text-gray-500 mt-1 mb-1 italic">Símbolos base (ASCII/Unicode)</div>
+                        <div class="arrow-v"></div>
+                        <div class="box-node border-uca-secondary">Léxico</div>
+                        <div class="text-xs text-gray-500 mt-1 mb-1 italic">Tokens (Palabras con sentido)</div>
+                        <div class="arrow-v"></div>
+                        <div class="box-node bg-uca-primary text-white">Constructores Sintácticos</div>
+                        <div class="text-xs text-gray-500 mt-1 italic">Gramática y Estructuras</div>
+                    </div>
+                    <p class="text-sm text-gray-600 mt-4 leading-relaxed">
+                        El <strong>alfabeto</strong> es el conjunto de símbolos. El <strong>léxico</strong> define las unidades mínimas con significado (tokens). Los <strong>constructores sintácticos</strong> son las reglas gramaticales para combinar esos tokens en instrucciones válidas.
+                    </p>
+                </div>
+
+                <!-- Visualización de Composición Léxica -->
+                <div class="area-card">
+                    <h3 class="text-xl font-bold text-uca-primary mb-2">Composición del Léxico</h3>
+                    <p class="text-xs text-gray-500 mb-4">Distribución típica de tipos de tokens en un programa fuente.</p>
+                    <div class="chart-container">
+                        <canvas id="lexiconChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Detalles de los elementos -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="bg-uca-primary text-white p-6 rounded-lg shadow-md">
+                    <h4 class="font-bold text-uca-secondary mb-2">El Alfabeto</h4>
+                    <p class="text-xs opacity-90">No solo son letras y números; incluye operadores, delimitadores y caracteres de control. Es el cimiento sobre el cual se construye el vocabulario del lenguaje.</p>
+                </div>
+                <div class="bg-uca-guinda-light text-white p-6 rounded-lg shadow-md">
+                    <h4 class="font-bold text-uca-secondary mb-2">Análisis Léxico</h4>
+                    <p class="text-xs opacity-90">El compilador agrupa caracteres en lexemas. Un lexema es una secuencia de caracteres que coincide con un patrón para formar un token (ej. "if", "contador", "+").</p>
+                </div>
+                <div class="bg-uca-secondary text-uca-primary p-6 rounded-lg shadow-md">
+                    <h4 class="font-bold mb-2">Sintaxis</h4>
+                    <p class="text-xs font-semibold">Define la forma del programa. Utiliza gramáticas formales (como BNF) para determinar si la secuencia de tokens tiene una estructura correcta.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Sección 1.6: Implementación -->
+        <section class="space-y-8">
+            <div class="text-center">
+                <span class="text-uca-primary font-bold tracking-widest uppercase text-sm">Modelos de Ejecución</span>
+                <h2 class="text-3xl font-black text-uca-primary underline decoration-uca-secondary decoration-4">Estrategias de implementación</h2>
+            </div>
+
+            <div class="bg-white rounded-xl shadow-lg overflow-hidden border border-uca-primary border-opacity-20">
+                <div class="bg-uca-primary p-4 text-white font-bold text-center">
+                    Comparativa de Métodos de Traducción
+                </div>
+                <div class="p-6 overflow-x-auto">
+                    <table class="w-full text-left text-sm">
+                        <thead class="bg-uca-beige text-uca-primary">
+                            <tr>
+                                <th class="p-3 border-b-2 border-uca-secondary">Características</th>
+                                <th class="p-3 border-b-2 border-uca-secondary">Compilación</th>
+                                <th class="p-3 border-b-2 border-uca-secondary">Interpretación</th>
+                                <th class="p-3 border-b-2 border-uca-secondary">Implementación Híbrida</th>
+                            </tr>
+                        </thead>
+                        <tbody class="text-gray-700">
+                            <tr class="hover:bg-gray-50">
+                                <td class="p-3 font-bold border-b">Traducción</td>
+                                <td class="p-3 border-b">Previa y total a binario.</td>
+                                <td class="p-3 border-b">En tiempo real, línea a línea.</td>
+                                <td class="p-3 border-b">A código intermedio (Bytecode).</td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="p-3 font-bold border-b">Velocidad</td>
+                                <td class="p-3 border-b text-green-700 font-bold">Máxima (ejecución nativa)</td>
+                                <td class="p-3 border-b text-red-700 font-bold">Lenta (sobrecarga de traducción)</td>
+                                <td class="p-3 border-b text-blue-700 font-bold">Equilibrada (JIT)</td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="p-3 font-bold border-b">Portabilidad</td>
+                                <td class="p-3 border-b">Baja (específico del SO)</td>
+                                <td class="p-3 border-b">Alta (corre donde haya intérprete)</td>
+                                <td class="p-3 border-b">Universal (vía Máquina Virtual)</td>
+                            </tr>
+                            <tr class="hover:bg-gray-50">
+                                <td class="p-3 font-bold">Ejemplos</td>
+                                <td class="p-3">C, C++, Rust, Go</td>
+                                <td class="p-3">PHP, JavaScript, Ruby</td>
+                                <td class="p-3">Java, Python, C#</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+                <div class="area-card">
+                    <h3 class="text-xl font-bold text-uca-primary mb-4">Balance: Rendimiento vs Flexibilidad</h3>
+                    <div class="chart-container">
+                        <canvas id="implementationRadarChart"></canvas>
+                    </div>
+                </div>
+                <div class="space-y-4">
+                    <div class="bg-white p-6 rounded-lg shadow-sm border-r-4 border-uca-primary">
+                        <h4 class="font-black text-uca-primary uppercase text-xs mb-2">Compilación Pura</h4>
+                        <p class="text-sm">El <strong>compilador</strong> analiza todo el código y genera un archivo ejecutable independiente. Es ideal para aplicaciones de sistemas donde cada microsegundo cuenta.</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow-sm border-r-4 border-uca-secondary">
+                        <h4 class="font-black text-uca-primary uppercase text-xs mb-2">Interpretación Directa</h4>
+                        <p class="text-sm">No genera un binario intermedio; el <strong>intérprete</strong> lee y ejecuta. Permite el desarrollo interactivo y la modificación del código "en caliente".</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow-sm border-r-4 border-uca-guinda-light">
+                        <h4 class="font-black text-uca-primary uppercase text-xs mb-2">El Enfoque Híbrido</h4>
+                        <p class="text-sm">El código se compila a un formato intermedio (Bytecode) que luego es ejecutado por una <strong>Máquina Virtual</strong>. Combina lo mejor de ambos mundos: seguridad y portabilidad.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Conclusión -->
+        <section class="bg-uca-primary text-white p-8 rounded-2xl shadow-2xl relative overflow-hidden">
+            <div class="absolute top-0 right-0 w-32 h-32 bg-uca-secondary opacity-20 -mr-16 -mt-16 rounded-full"></div>
+            <h2 class="text-2xl font-black mb-6 flex items-center">
+                <span class="mr-4 text-uca-secondary">📌</span>
+                Síntesis de la Investigación
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 relative z-10">
+                <div class="bg-white bg-opacity-10 p-4 rounded-lg">
+                    <h4 class="font-bold text-uca-secondary mb-2">Interdependencia de Elementos</h4>
+                    <p class="text-sm leading-relaxed">No puede existir una implementación eficiente sin una definición sintáctica robusta. La claridad en el léxico facilita la creación de compiladores que optimizan el uso de recursos.</p>
+                </div>
+                <div class="bg-white bg-opacity-10 p-4 rounded-lg">
+                    <h4 class="font-bold text-uca-secondary mb-2">Tendencia Actual</h4>
+                    <p class="text-sm leading-relaxed">La industria se mueve hacia implementaciones híbridas con compilación Just-In-Time (JIT), permitiendo que lenguajes como JavaScript o Python alcancen velocidades cercanas a C++ en ciertos dominios.</p>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-uca-primary py-8 mt-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <p class="text-uca-light text-sm">
+                Material de índole didáctico para la Universidad Nacional Rosario Castellanos
+            </p>
+            <p class="text-uca-light text-xs mt-2 opacity-75">
+                UCA: Lenguajes de programación
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        /**
+         * Label Wrapping Logic (16 characters limit)
+         */
+        function wrapLabels(labels) {
+            return labels.map(label => {
+                if (label.length > 16) {
+                    let words = label.split(' ');
+                    let lines = [];
+                    let currentLine = '';
+                    
+                    words.forEach(word => {
+                        if ((currentLine + word).length > 16) {
+                            lines.push(currentLine.trim());
+                            currentLine = word + ' ';
+                        } else {
+                            currentLine += word + ' ';
+                        }
+                    });
+                    lines.push(currentLine.trim());
+                    return lines;
+                }
+                return label;
+            });
+        }
+
+        /**
+         * Tooltip Multi-line Handler
+         */
+        const tooltipPlugin = {
+            callbacks: {
+                title: function(tooltipItems) {
+                    const item = tooltipItems[0];
+                    let label = item.chart.data.labels[item.dataIndex];
+                    if (Array.isArray(label)) {
+                        return label.join(' ');
+                    } else {
+                        return label;
+                    }
+                }
+            }
+        };
+
+        document.addEventListener('DOMContentLoaded', () => {
+            // 1. Lexicon Chart (Pie/Doughnut)
+            const ctxLex = document.getElementById('lexiconChart').getContext('2d');
+            const lexLabels = ['Palabras Clave', 'Identificadores', 'Operadores', 'Delimitadores', 'Literales de Datos'];
+            
+            new Chart(ctxLex, {
+                type: 'doughnut',
+                data: {
+                    labels: wrapLabels(lexLabels),
+                    datasets: [{
+                        data: [20, 35, 15, 15, 15],
+                        backgroundColor: ['#5c1b35', '#ad9348', '#8b3a5a', '#f0e8d9', '#cccccc'],
+                        borderColor: '#ffffff',
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'bottom', labels: { boxWidth: 12, font: { size: 10 } } },
+                        tooltip: tooltipPlugin
+                    }
+                }
+            });
+
+            // 2. Implementation Radar Chart
+            const ctxRadar = document.getElementById('implementationRadarChart').getContext('2d');
+            const radarLabels = ['Velocidad de Ejecución', 'Portabilidad', 'Facilidad de Depuración', 'Tiempo de Desarrollo', 'Control de Hardware'];
+
+            new Chart(ctxRadar, {
+                type: 'radar',
+                data: {
+                    labels: wrapLabels(radarLabels),
+                    datasets: [
+                        {
+                            label: 'Compilados (C/C++)',
+                            data: [95, 30, 40, 40, 95],
+                            backgroundColor: 'rgba(92, 27, 53, 0.2)',
+                            borderColor: '#5c1b35',
+                            pointBackgroundColor: '#5c1b35'
+                        },
+                        {
+                            label: 'Interpretados (JS/PHP)',
+                            data: [35, 90, 95, 90, 20],
+                            backgroundColor: 'rgba(173, 147, 72, 0.2)',
+                            borderColor: '#ad9348',
+                            pointBackgroundColor: '#ad9348'
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'top', labels: { boxWidth: 12, font: { size: 10 } } },
+                        tooltip: tooltipPlugin
+                    },
+                    scales: {
+                        r: {
+                            beginAtZero: true,
+                            max: 100,
+                            ticks: { display: false }
+                        }
+                    }
+                }
+            });
+        });
+        
+        // NO SVG, NO MERMAID JS USED.
+    </script>
+
+</body>
+</html>

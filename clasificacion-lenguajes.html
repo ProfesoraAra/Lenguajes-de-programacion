@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clasificación de los Lenguajes de Programación</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'uca-primary': '#5c1b35', // Guinda Oscuro
+                        'uca-secondary': '#ad9348', // Dorado
+                        'uca-light': '#fefcf8', // Blanco / Crema
+                        'uca-beige': '#f0e8d9', // Fondo Beige
+                        'uca-guinda-light': '#8b3a5a' // Guinda Intermedio
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 350px;
+            max-height: 400px;
+            padding-top: 1rem;
+            padding-bottom: 1rem;
+        }
+        .area-card {
+            background-color: #ffffff;
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            padding: 1.5rem;
+            border-top: 4px solid #ad9348;
+            transition: transform 0.2s ease;
+        }
+        .area-card:hover {
+            transform: translateY(-5px);
+        }
+    </style>
+</head>
+<body class="bg-uca-beige font-sans text-gray-800">
+
+    <header class="bg-uca-light shadow-lg sticky top-0 z-10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex flex-col md:flex-row justify-between items-center">
+            
+            <div class="flex items-center space-x-4 mb-4 md:mb-0">
+                <img src="imagenes/cintilloUNRC.png" 
+                    alt="Logo Universidad Rosario Castellanos" 
+                    class="h-10 w-auto"
+                    onerror="this.onerror=null;this.src='https://placehold.co/150x40/5c1b35/ad9348?text=UNRC+Logo';"
+                >
+            </div>
+
+            <h1 class="text-3xl sm:text-4xl font-black text-uca-primary text-center px-4 py-2 rounded-lg">
+                Clasificación de los Lenguajes de Programación
+            </h1>
+            
+            <!-- Botón de Acción Inicio (Guinda) -->
+            <a href="index.html" class="bg-uca-primary hover:bg-opacity-90 text-white font-bold py-2 px-6 rounded-full shadow-md transition duration-300 transform hover:scale-105">
+                Inicio
+            </a>
+        </div>
+    </header>
+
+    <main class="container mx-auto max-w-6xl p-4 md:p-8 space-y-12">
+
+        <!-- Sección: ¿Por qué clasificar? (Rectángulo blanco) -->
+        <section class="bg-white rounded-xl shadow-md p-8 border-l-8 border-uca-secondary">
+            <h2 class="text-2xl font-black text-uca-primary mb-4 italic">¿Por qué clasificar los lenguajes según su aplicación?</h2>
+            <div class="text-gray-700 leading-relaxed space-y-4">
+                <p>
+                    La clasificación por área de aplicación es fundamental porque permite entender que los lenguajes de programación no son herramientas genéricas, sino soluciones diseñadas para enfrentar desafíos específicos del entorno computacional.
+                </p>
+                <p>
+                    Esta segmentación ayuda a los desarrolladores y arquitectos a seleccionar la tecnología basándose en el <strong>rendimiento</strong>, la <strong>seguridad</strong> y las <strong>bibliotecas especializadas</strong> disponibles. No se trata solo de sintaxis, sino de la eficiencia con la que un lenguaje maneja los datos y recursos de un dominio particular.
+                </p>
+            </div>
+        </section>
+
+        <!-- Sección: Dominios Predominantes (Cuadrícula de tarjetas) -->
+        <section class="space-y-8">
+            <div class="text-center">
+                <h2 class="text-3xl font-black text-uca-primary underline decoration-uca-secondary decoration-4">Dominios de Aplicación Predominantes</h2>
+                <p class="text-gray-600 mt-2">Principales ecosistemas del desarrollo de software actual.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- 1. Aplicaciones Científicas -->
+                <div class="material-card p-6 border-t-4 border-uca-secondary">
+                    <div class="text-4xl mb-3">🔬</div>
+                    <h3 class="text-xl font-bold text-uca-primary mb-2">Aplicaciones Científicas</h3>
+                    <p class="text-sm text-gray-600">
+                        Históricamente representadas por lenguajes como <strong>Fortran</strong>. Se enfocan en cálculos matemáticos complejos, alta precisión en coma flotante y manejo masivo de datos numéricos.
+                    </p>
+                </div>
+
+                <!-- 2. Aplicaciones de Negocio -->
+                <div class="material-card p-6 border-t-4 border-uca-primary">
+                    <div class="text-4xl mb-3">💼</div>
+                    <h3 class="text-xl font-bold text-uca-primary mb-2">Aplicaciones de Negocio</h3>
+                    <p class="text-sm text-gray-600">
+                        Orientadas al procesamiento de transacciones financieras, generación de informes masivos y gestión de bases de datos corporativas. <strong>COBOL</strong> y <strong>Java</strong> son pilares en este sector.
+                    </p>
+                </div>
+
+                <!-- 3. Inteligencia Artificial -->
+                <div class="material-card p-6 border-t-4 border-uca-secondary">
+                    <div class="text-4xl mb-3">🤖</div>
+                    <h3 class="text-xl font-bold text-uca-primary mb-2">Inteligencia Artificial</h3>
+                    <p class="text-sm text-gray-600">
+                        Requieren manipulación simbólica y de listas. Desde los clásicos <strong>Lisp</strong> y <strong>Prolog</strong> hasta el dominio actual de <strong>Python</strong> para redes neuronales y aprendizaje automático.
+                    </p>
+                </div>
+
+                <!-- 4. Programación de Sistemas -->
+                <div class="material-card p-6 border-t-4 border-uca-primary">
+                    <div class="text-4xl mb-3">💻</div>
+                    <h3 class="text-xl font-bold text-uca-primary mb-2">Programación de Sistemas</h3>
+                    <p class="text-sm text-gray-600">
+                        Lenguajes diseñados para crear sistemas operativos, drivers y utilidades de bajo nivel. El control de memoria y la velocidad son críticos (ej. <strong>C</strong>, <strong>C++</strong> y <strong>Rust</strong>).
+                    </p>
+                </div>
+
+                <!-- 5. Software de Web/Scripting -->
+                <div class="material-card p-6 border-t-4 border-uca-secondary">
+                    <div class="text-4xl mb-3">🌐</div>
+                    <h3 class="text-xl font-bold text-uca-primary mb-2">Software de Web/Scripting</h3>
+                    <p class="text-sm text-gray-600">
+                        Dominan la arquitectura cliente-servidor y la automatización de tareas. <strong>JavaScript</strong> es el estándar para la web, junto con <strong>PHP</strong> y <strong>Ruby</strong> en el servidor.
+                    </p>
+                </div>
+
+                <!-- 6. Dispositivos Móviles -->
+                <div class="material-card p-6 border-t-4 border-uca-primary">
+                    <div class="text-4xl mb-3">📱</div>
+                    <h3 class="text-xl font-bold text-uca-primary mb-2">Dispositivos Móviles</h3>
+                    <p class="text-sm text-gray-600">
+                        Desarrollo optimizado para smartphones y tablets. Incluye lenguajes nativos como <strong>Swift</strong> (iOS) y <strong>Kotlin</strong> (Android), así como entornos multiplataforma.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <section class="bg-white rounded-lg shadow-md p-6 md:p-10">
+            <div class="flex flex-col lg:flex-row gap-12 items-center">
+                <div class="lg:w-1/2">
+                    <h2 class="text-2xl font-bold text-uca-primary mb-6 underline decoration-uca-secondary decoration-4">Análisis de Relevancia Actual</h2>
+                    <p class="text-gray-700 leading-relaxed mb-6">
+                        Aunque los lenguajes de propósito general (como Python) ganan terreno, la industria sigue fragmentada por necesidad técnica. Los lenguajes de <strong>Sistemas</strong> priorizan la velocidad, mientras que los de <strong>Negocios</strong> priorizan la integridad de datos y el mantenimiento a largo plazo.
+                    </p>
+                    <div class="space-y-4">
+                        <div class="flex items-center space-x-4">
+                            <span class="w-4 h-4 rounded-full bg-uca-primary"></span>
+                            <p class="text-sm"><strong>Propósito General:</strong> C, Java, Python.</p>
+                        </div>
+                        <div class="flex items-center space-x-4">
+                            <span class="w-4 h-4 rounded-full bg-uca-secondary"></span>
+                            <p class="text-sm"><strong>Propósito Específico (DSL):</strong> SQL, R, Verilog.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="lg:w-1/2 w-full">
+                    <div class="chart-container">
+                        <canvas id="areasRelevanciaChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="bg-uca-primary text-white p-8 rounded-2xl shadow-2xl relative overflow-hidden">
+            <!-- Patrón decorativo visual sin SVG -->
+            <div class="absolute top-0 right-0 w-32 h-32 bg-uca-secondary opacity-20 -mr-16 -mt-16 rounded-full"></div>
+            
+            <h2 class="text-2xl font-black mb-6 flex items-center">
+                <span class="mr-4 text-uca-secondary">⚡</span>
+                Conclusión de la Investigación
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 relative z-10">
+                <div class="bg-white bg-opacity-10 p-4 rounded-lg">
+                    <h4 class="font-bold text-uca-secondary mb-2">Evolución hacia la Abstracción</h4>
+                    <p class="text-sm leading-relaxed">Las áreas de aplicación han pasado de requerir un control total del hardware (Científico/Sistemas) a enfocarse en la velocidad de desarrollo y legibilidad (Web/IA).</p>
+                </div>
+                <div class="bg-white bg-opacity-10 p-4 rounded-lg">
+                    <h4 class="font-bold text-uca-secondary mb-2">Convergencia Tecnológica</h4>
+                    <p class="text-sm leading-relaxed">Hoy en día, un solo lenguaje (como Python) puede cubrir Ciencia, IA y Web gracias a su ecosistema de módulos, difuminando las fronteras clásicas.</p>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-uca-primary py-8 mt-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <p class="text-uca-light text-sm">
+                Material de índole didáctico para la Universidad Nacional Rosario Castellanos
+            </p>
+            <p class="text-uca-light text-xs mt-2 opacity-75">
+                UCA: Lenguajes de programación
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        // Función para envolver etiquetas largas según la regla de 16 caracteres
+        function wrapLabels(labels) {
+            return labels.map(label => {
+                if (label.length > 16) {
+                    let words = label.split(' ');
+                    let lines = [];
+                    let currentLine = '';
+                    
+                    words.forEach(word => {
+                        if ((currentLine + word).length > 16) {
+                            lines.push(currentLine.trim());
+                            currentLine = word + ' ';
+                        } else {
+                            currentLine += word + ' ';
+                        }
+                    });
+                    lines.push(currentLine.trim());
+                    return lines;
+                }
+                return label;
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const ctx = document.getElementById('areasRelevanciaChart').getContext('2d');
+            
+            const rawLabels = [
+                'Desarrollo Web y Scripting',
+                'Dispositivos Móviles',
+                'Inteligencia Artificial',
+                'Negocios y Finanzas',
+                'Sistemas y Embebidos',
+                'Ciencia e Ingeniería'
+            ];
+
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: wrapLabels(rawLabels),
+                    datasets: [{
+                        label: 'Demanda Laboral Estimada (%)',
+                        data: [45, 25, 15, 8, 5, 2],
+                        backgroundColor: [
+                            '#5c1b35', // Primary
+                            '#ad9348', // Secondary
+                            '#8b3a5a', // Light Guinda
+                            '#5c1b35', 
+                            '#ad9348',
+                            '#8b3a5a'
+                        ],
+                        borderRadius: 6
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    indexAxis: 'y',
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                title: function(tooltipItems) {
+                                    const item = tooltipItems[0];
+                                    let label = item.chart.data.labels[item.dataIndex];
+                                    return Array.isArray(label) ? label.join(' ') : label;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            grid: { display: false },
+                            ticks: { color: '#5c1b35', font: { weight: 'bold' } }
+                        },
+                        y: {
+                            grid: { display: false },
+                            ticks: { 
+                                color: '#5c1b35', 
+                                font: { size: 10 } 
+                            }
+                        }
+                    }
+                }
+            });
+        });
+        // NO SVG, NO MERMAID JS USED.
+    </script>
+
+</body>
+</html>
