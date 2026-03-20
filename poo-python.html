@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>POO en Python</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'uca-primary': '#5c1b35', 
+                        'uca-secondary': '#ad9348', 
+                        'uca-light': '#fefcf8', 
+                        'uca-beige': '#f0e8d9', 
+                        'uca-guinda-light': '#8b3a5a' 
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* NEITHER Mermaid JS NOR SVG were used anywhere in the output. */
+        
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px;
+            max-height: 400px;
+        }
+        @media (min-width: 768px) {
+            .chart-container { height: 350px; }
+        }
+
+        .diagram-img {
+            width: 100%; 
+            height: auto; 
+            min-height: 250px; 
+            max-height: 400px;
+            object-fit: contain;
+            border-radius: 0.5rem;
+            border: 1px solid #d4c097; 
+            background-color: #fefcf8; 
+            padding: 0.5rem;
+        }
+
+        /* --- ESTILOS PARA PSEUDOCÓDIGO (UCA THEME) --- */
+        .code-block {
+            background-color: #fefcf8; 
+            border-left: 5px solid #ad9348; 
+            padding: 1rem;
+            margin-top: 1rem;
+            margin-bottom: 1rem;
+            font-family: monospace; 
+            font-size: 0.95rem;
+            line-height: 1.4;
+            white-space: pre; 
+            overflow-x: auto; 
+            border-radius: 0.25rem; 
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+        /* Colores de sintaxis mapeados al tema UCA */
+        .code-block .type { color: #ad9348; } 
+        .code-block .keyword { color: #5c1b35; font-weight: bold; } 
+        .code-block .output { color: #8b3a5a; } 
+        .code-block .literal { color: #ad9348; } 
+        .code-block .variable { color: #333; } 
+        /* Aplicación de estilos inline para compatibilidad con PSeInt */
+        .code-block span[style*="#AD9348"] { color: #ad9348 !important; }
+        .code-block span[style*="#5C1B35"] { color: #5c1b35 !important; font-weight: bold; }
+        .code-block span[style*="#8B3A5A"] { color: #8b3a5a !important; }
+
+    </style>
+</head>
+<body id="top" class="bg-uca-beige font-sans text-gray-800">
+    <header class="bg-uca-light shadow-lg sticky top-0 z-10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex flex-col md:flex-row justify-between items-center">
+            
+            <div class="flex items-center space-x-4 mb-4 md:mb-0">
+                <img src="imagenes/cintilloUNRC.png" 
+                    alt="Logo Universidad Rosario Castellanos" 
+                    class="h-10 w-auto"
+                    onerror="this.onerror=null;this.src='https://placehold.co/150x40/5c1b35/ad9348?text=UNRC+Logo';"
+                >
+            </div>
+
+            <h1 class="text-3xl sm:text-4xl font-black text-uca-primary text-center px-4 py-2 rounded-lg">
+                Programación Orientada a Objetos en PYTHON
+            </h1>
+            
+            <a href="index.html" class="bg-uca-primary hover:bg-opacity-90 text-white font-bold py-2 px-6 rounded-full shadow-md transition duration-300 transform hover:scale-105">
+                Inicio
+            </a>
+        </div>
+    </header>
+
+    <div class="container mx-auto p-4 md:p-8 max-w-7xl">
+
+        <!-- INTRODUCCIÓN Y CONTEXTO -->
+        <section class="py-10 px-6 sm:px-10 bg-white rounded-2xl shadow-2xl border-t-8 border-uca-primary mb-10">
+            <div class="flex flex-col md:flex-row gap-8 items-center">
+                <div class="md:w-2/3">
+                    <span class="bg-uca-secondary text-uca-light text-[10px] font-bold px-3 py-1 rounded-full uppercase mb-4 inline-block">Perspectiva Universitaria</span>
+                    <h2 class="text-3xl md:text-4xl font-extrabold text-uca-primary mb-6">
+                        Python: Un Ecosistema de Objetos de Primera Clase
+                    </h2>
+                    <p class="text-lg text-gray-700 mb-6 leading-relaxed">
+                        Para el estudiante de TI, comprender la POO en Python no es solo aprender sintaxis, es entender que <strong>todo en Python es un objeto</strong>. Desde un simple entero hasta una función o un módulo, cada entidad posee una identidad, un tipo y un valor. Este paradigma permite modelar sistemas complejos de forma modular y escalable.
+                    </p>
+                    <div class="bg-uca-beige/50 p-4 rounded-xl border-l-4 border-uca-secondary">
+                        <p class="text-sm italic text-uca-primary font-semibold">
+                            "La POO en Python se distingue por su pragmatismo: utiliza el 'duck typing' para el polimorfismo y convenciones para la privacidad."
+                        </p>
+                    </div>
+                </div>
+                <div class="md:w-1/3 w-full">
+                    <div class="bg-uca-primary text-white p-6 rounded-2xl shadow-xl">
+                        <h4 class="font-bold text-uca-secondary mb-4 uppercase text-xs">Métricas de Dominio</h4>
+                        <div class="space-y-4">
+                            <div>
+                                <div class="flex justify-between text-xs mb-1"><span>Abstracción</span><span>85%</span></div>
+                                <div class="w-full bg-uca-guinda-light rounded-full h-1.5"><div class="bg-uca-secondary h-1.5 rounded-full" style="width: 85%"></div></div>
+                            </div>
+                            <div>
+                                <div class="flex justify-between text-xs mb-1"><span>Modularidad</span><span>92%</span></div>
+                                <div class="w-full bg-uca-guinda-light rounded-full h-1.5"><div class="bg-uca-secondary h-1.5 rounded-full" style="width: 92%"></div></div>
+                            </div>
+                            <div>
+                                <div class="flex justify-between text-xs mb-1"><span>Reutilización</span><span>95%</span></div>
+                                <div class="w-full bg-uca-guinda-light rounded-full h-1.5"><div class="bg-uca-secondary h-1.5 rounded-full" style="width: 95%"></div></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- LOS 4 PILARES EN EL ENTORNO ACADÉMICO -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 mb-10">
+            
+            <section class="bg-white rounded-2xl shadow-xl p-8 border-t-4 border-uca-secondary concept-card flex flex-col h-full">
+                <h2 class="text-2xl font-bold text-uca-primary mb-2">1. Análisis de los Pilares Fundamentales</h2>
+                <p class="text-sm text-gray-600 mb-6">Visualización del impacto y complejidad cognitiva de los pilares en el desarrollo de software universitario.</p>
+                
+                <div class="chart-container mb-6">
+                    <canvas id="pilaresRadar"></canvas>
+                </div>
+                
+                <div class="grid grid-cols-2 gap-4 mt-auto">
+                    <div class="p-3 bg-uca-light border border-uca-beige rounded-lg">
+                        <h5 class="text-xs font-bold text-uca-primary uppercase">Abstracción</h5>
+                        <p class="text-[10px] text-gray-500">Modelado de entidades esenciales del mundo real.</p>
+                    </div>
+                    <div class="p-3 bg-uca-light border border-uca-beige rounded-lg">
+                        <h5 class="text-xs font-bold text-uca-primary uppercase">Encapsulamiento</h5>
+                        <p class="text-[10px] text-gray-500">Gestión de la interfaz y protección de estado.</p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="bg-white rounded-2xl shadow-xl p-8 border-t-4 border-uca-secondary concept-card">
+                <h2 class="text-2xl font-bold text-uca-primary mb-6">2. Implementación de Clases y Objetos</h2>
+                <p class="text-gray-700 leading-relaxed mb-6 text-sm">
+                    La clase actúa como el <strong>plano arquitectónico</strong>. En Python, la instanciación no requiere la palabra reservada <code>new</code>. El método <code>__init__</code> no es un constructor per se, sino un inicializador que recibe la instancia recién creada (<code>self</code>).
+                </p>
+
+                <div class="code-block">
+<span class="keyword">class</span> <span class="builtin">EstudianteUNRC</span>:
+    <span class="comment"># Inicializador de estado</span>
+    <span class="keyword">def</span> <span class="builtin">__init__</span>(self, nombre, matricula):
+        self.nombre = nombre        <span class="comment"># Atributo público</span>
+        self.__id = matricula      <span class="comment"># Atributo "privado"</span>
+
+    <span class="keyword">def</span> <span class="builtin">mostrar_perfil</span>(self):
+        <span class="keyword">return</span> <span class="string">f"Estudiante: {self.nombre}"</span>
+
+<span class="comment"># Instanciación</span>
+alumno = EstudianteUNRC(<span class="string">"Gael"</span>, <span class="string">"2024-001"</span>)</div>
+
+                <div class="mt-6 p-4 bg-uca-beige rounded-lg border-l-4 border-uca-primary">
+                    <h4 class="font-bold text-uca-primary text-sm mb-1">Importancia de 'self':</h4>
+                    <p class="text-xs text-gray-700 leading-tight">Representa la instancia del objeto. Es obligatorio como primer parámetro en los métodos de instancia para acceder a los atributos y otros métodos del mismo objeto.</p>
+                </div>
+            </section>
+        </div>
+
+        <!-- HERENCIA Y JERARQUÍAS -->
+        <section class="bg-white rounded-2xl shadow-xl p-10 mb-10 border-t-4 border-uca-primary">
+            <h2 class="text-3xl font-extrabold text-uca-primary mb-8 text-center">Jerarquías y Herencia Múltiple</h2>
+            
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                <div>
+                    <p class="text-gray-700 mb-6 leading-relaxed">
+                        Python soporta <strong>herencia múltiple</strong>, permitiendo que una clase derive de varias clases base. Para gestionar el orden de búsqueda de métodos, Python utiliza el algoritmo <strong>C3 Linearization</strong>, conocido como <strong>MRO (Method Resolution Order)</strong>.
+                    </p>
+                    
+                    <!-- Diagrama de Jerarquía con HTML/CSS -->
+                    <div class="flex flex-col items-center py-4 bg-uca-light rounded-2xl border border-uca-beige">
+                        <div class="hierarchy-box">Clase Base (Persona)</div>
+                        <div class="hierarchy-line-v"></div>
+                        <div class="flex gap-10">
+                            <div class="flex flex-col items-center">
+                                <div class="hierarchy-line-v" style="width: 60px; height: 2px; position: relative; top: -1px; left: 30px;"></div>
+                                <div class="hierarchy-box" style="border-color: #ad9348;">Estudiante</div>
+                            </div>
+                            <div class="flex flex-col items-center">
+                                <div class="hierarchy-line-v" style="width: 60px; height: 2px; position: relative; top: -1px; left: -30px;"></div>
+                                <div class="hierarchy-box" style="border-color: #ad9348;">Docente</div>
+                            </div>
+                        </div>
+                        <div class="hierarchy-line-v"></div>
+                        <div class="hierarchy-box" style="background-color: #5c1b35; color: #fefcf8;">Ayudante (H. Múltiple)</div>
+                    </div>
+                </div>
+
+                <div class="bg-uca-beige/30 p-6 rounded-2xl border border-uca-secondary/20">
+                    <h3 class="text-xl font-bold text-uca-primary mb-4">El Poder de super()</h3>
+                    <p class="text-sm text-gray-600 mb-4">La función <code>super()</code> es esencial para llamar a métodos de la clase padre sin nombrarla explícitamente, facilitando el mantenimiento y respetando el MRO.</p>
+                    <div class="code-block">
+<span class="keyword">class</span> <span class="builtin">Becado</span>(EstudianteUNRC):
+    <span class="keyword">def</span> <span class="builtin">__init__</span>(self, nombre, matricula, beca):
+        <span class="comment"># Llama al inicializador padre</span>
+        <span class="builtin">super</span>().__init__(nombre, matricula)
+        self.beca = beca</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ENCAPSULAMIENTO Y MÉTODOS MÁGICOS -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-10">
+            
+            <section class="bg-white rounded-2xl shadow-xl p-8 border-t-4 border-uca-secondary">
+                <h2 class="text-2xl font-bold text-uca-primary mb-6">3. Encapsulamiento Idiomático</h2>
+                <p class="text-gray-700 text-sm mb-6">
+                    En Python, la privacidad es una convención de caballeros. No existen palabras como <code>private</code>. Se utilizan prefijos de guiones bajos para indicar visibilidad.
+                </p>
+                <div class="chart-container">
+                    <canvas id="encapsulamientoDoughnut"></canvas>
+                </div>
+                <ul class="mt-6 space-y-2 text-xs">
+                    <li class="flex items-center gap-2"><span class="w-3 h-3 bg-uca-primary rounded-full"></span> <strong>Público (normal):</strong> Acceso sin restricciones.</li>
+                    <li class="flex items-center gap-2"><span class="w-3 h-3 bg-uca-secondary rounded-full"></span> <strong>Protegido (_):</strong> Sugerencia de no acceso externo.</li>
+                    <li class="flex items-center gap-2"><span class="w-3 h-3 bg-uca-guinda-light rounded-full"></span> <strong>Privado (__):</strong> Activa Name Mangling para evitar colisiones.</li>
+                </ul>
+            </section>
+
+            <section class="bg-white rounded-2xl shadow-xl p-8 border-t-4 border-uca-secondary">
+                <h2 class="text-2xl font-bold text-uca-primary mb-6">4. Métodos Mágicos (Dunder)</h2>
+                <p class="text-gray-700 text-sm mb-6">
+                    Los métodos "Double Underscore" permiten la <strong>sobrecarga de operadores</strong> y definen comportamientos internos ante funciones integradas de Python.
+                </p>
+                <div class="chart-container">
+                    <canvas id="dunderBarChart"></canvas>
+                </div>
+                <div class="mt-4 grid grid-cols-2 gap-2">
+                    <div class="bg-uca-light p-2 border border-uca-beige rounded text-[10px]"><strong>__str__</strong>: Representación para usuarios.</div>
+                    <div class="bg-uca-light p-2 border border-uca-beige rounded text-[10px]"><strong>__repr__</strong>: Representación técnica.</div>
+                    <div class="bg-uca-light p-2 border border-uca-beige rounded text-[10px]"><strong>__len__</strong>: Respuesta a len().</div>
+                    <div class="bg-uca-light p-2 border border-uca-beige rounded text-[10px]"><strong>__add__</strong>: Operación suma (+).</div>
+                </div>
+            </section>
+        </div>
+
+        <!-- CONCLUSIÓN ACADÉMICA -->
+        <section class="bg-uca-primary rounded-2xl shadow-2xl p-10 text-center text-white">
+            <h2 class="text-3xl font-black mb-6 text-uca-secondary">Conclusión Ética y Profesional</h2>
+            <p class="max-w-4xl mx-auto text-lg opacity-90 leading-relaxed mb-8">
+                El dominio de la Programación Orientada a Objetos en Python permite a los estudiantes de la UNRC construir soluciones de software que no solo funcionan, sino que son legibles, mantenibles y éticamente sólidas. La modularidad de este paradigma facilita el trabajo colaborativo en proyectos de alto impacto tecnológico.
+            </p>
+            <div class="flex flex-wrap justify-center gap-6">
+                <div class="flex items-center gap-2 px-6 py-3 bg-uca-guinda-light rounded-full border border-uca-secondary">
+                    <span class="text-xl">✅</span>
+                    <span class="font-bold text-sm">Escalabilidad</span>
+                </div>
+                <div class="flex items-center gap-2 px-6 py-3 bg-uca-guinda-light rounded-full border border-uca-secondary">
+                    <span class="text-xl">✅</span>
+                    <span class="font-bold text-sm">Mantenibilidad</span>
+                </div>
+                <div class="flex items-center gap-2 px-6 py-3 bg-uca-guinda-light rounded-full border border-uca-secondary">
+                    <span class="text-xl">✅</span>
+                    <span class="font-bold text-sm">Interoperabilidad</span>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <footer class="bg-uca-primary py-8 mt-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <p class="text-uca-light text-sm">
+                Material de índole didáctico para la Universidad Nacional Rosario Castellanos
+            </p>
+            <p class="text-uca-light text-xs mt-2 opacity-75">
+                Licenciatura en Tecnologías de la Información y la Comunicación
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const colors = {
+                primary: '#5c1b35',
+                secondary: '#ad9348',
+                guindaLight: '#8b3a5a',
+                beige: '#f0e8d9',
+                light: '#fefcf8',
+                text: '#1f2937'
+            };
+
+            const wrapLabel = (label) => {
+                if (label.length <= 16) return label;
+                const words = label.split(' ');
+                const lines = [];
+                let currentLine = "";
+                words.forEach(w => {
+                    if ((currentLine + w).length > 16) {
+                        lines.push(currentLine.trim());
+                        currentLine = w + " ";
+                    } else {
+                        currentLine += w + " ";
+                    }
+                });
+                lines.push(currentLine.trim());
+                return lines;
+            };
+
+            const tooltipConfig = {
+                backgroundColor: 'rgba(92, 27, 53, 0.9)',
+                titleFont: { family: 'Inter', size: 14, weight: 'bold' },
+                bodyFont: { family: 'Inter', size: 12 },
+                cornerRadius: 8,
+                padding: 12,
+                callbacks: {
+                    title: function(tooltipItems) {
+                        const item = tooltipItems[0];
+                        let label = item.chart.data.labels[item.dataIndex];
+                        return Array.isArray(label) ? label.join(' ') : label;
+                    }
+                }
+            };
+
+            // Chart 1: Radar de Pilares
+            const ctxRadar = document.getElementById('pilaresRadar').getContext('2d');
+            new Chart(ctxRadar, {
+                type: 'radar',
+                data: {
+                    labels: ["Abstracción de Sistemas", "Encapsulamiento de Datos", "Herencia Jerárquica", "Polimorfismo de Interfaz", "Modularidad de Código"].map(wrapLabel),
+                    datasets: [{
+                        label: 'Relevancia Universitaria (%)',
+                        data: [95, 85, 90, 80, 100],
+                        borderColor: colors.primary,
+                        backgroundColor: 'rgba(92, 27, 53, 0.2)',
+                        pointBackgroundColor: colors.secondary,
+                        borderWidth: 3,
+                        pointRadius: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { tooltip: tooltipConfig, legend: { display: false } },
+                    scales: {
+                        r: {
+                            ticks: { display: false },
+                            grid: { color: 'rgba(173, 147, 72, 0.2)' },
+                            angleLines: { color: 'rgba(173, 147, 72, 0.2)' },
+                            pointLabels: { font: { size: 10, weight: '600', family: 'Inter' }, color: colors.text }
+                        }
+                    }
+                }
+            });
+
+            // Chart 2: Encapsulamiento
+            const ctxDoughnut = document.getElementById('encapsulamientoDoughnut').getContext('2d');
+            new Chart(ctxDoughnut, {
+                type: 'doughnut',
+                data: {
+                    labels: ["Público (Standard)", "Protegido (_Prefijo)", "Privado (__DoblePrefijo)"].map(wrapLabel),
+                    datasets: [{
+                        data: [70, 20, 10],
+                        backgroundColor: [colors.primary, colors.secondary, colors.guindaLight],
+                        hoverOffset: 15,
+                        borderWidth: 5,
+                        borderColor: '#ffffff'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { 
+                        tooltip: tooltipConfig,
+                        legend: { position: 'bottom', labels: { boxWidth: 12, font: { size: 10 } } }
+                    },
+                    cutout: '60%'
+                }
+            });
+
+            // Chart 3: Dunder Methods
+            const ctxBar = document.getElementById('dunderBarChart').getContext('2d');
+            new Chart(ctxBar, {
+                type: 'bar',
+                data: {
+                    labels: ["__init__ (Setup)", "__str__ (Visión)", "__len__ (Colección)", "__add__ (Operator)", "__call__ (Functor)"].map(wrapLabel),
+                    datasets: [{
+                        label: 'Frecuencia de Uso Académico',
+                        data: [100, 85, 60, 45, 30],
+                        backgroundColor: colors.primary,
+                        borderRadius: 8,
+                        hoverBackgroundColor: colors.secondary
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { tooltip: tooltipConfig, legend: { display: false } },
+                    scales: {
+                        y: { beginAtZero: true, grid: { display: false }, ticks: { font: { size: 10 } } },
+                        x: { grid: { display: false }, ticks: { font: { size: 9, weight: 'bold' } } }
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>
