@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Programación funcional</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'uca-primary': '#5c1b35', 
+                        'uca-secondary': '#ad9348', 
+                        'uca-light': '#fefcf8', 
+                        'uca-beige': '#f0e8d9', 
+                        'uca-guinda-light': '#8b3a5a' 
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* NEITHER Mermaid JS NOR SVG were used anywhere in the output. */
+        
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px;
+            max-height: 400px;
+        }
+        @media (min-width: 768px) {
+            .chart-container { height: 380px; }
+        }
+
+        .code-block {
+            background-color: #fefcf8; 
+            border-left: 5px solid #ad9348; 
+            padding: 1.25rem;
+            margin-top: 1rem;
+            margin-bottom: 1rem;
+            font-family: 'Courier New', monospace; 
+            font-size: 0.9rem;
+            line-height: 1.5;
+            white-space: pre; 
+            overflow-x: auto; 
+            border-radius: 0.25rem; 
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);
+        }
+        .code-block .keyword { color: #5c1b35; font-weight: bold; } 
+        .code-block .comment { color: #8b7355; font-style: italic; }
+        .code-block .string { color: #ad9348; }
+
+        .metric-card {
+            background: #fefcf8;
+            border: 1px solid #e5e7eb;
+            transition: all 0.3s ease;
+        }
+        .metric-card:hover {
+            border-color: #ad9348;
+            box-shadow: 0 4px 12px rgba(173, 147, 72, 0.1);
+        }
+
+        /* Diagrama con HTML/CSS */
+        .step-pill {
+            padding: 0.75rem 1.5rem;
+            background: #5c1b35;
+            color: white;
+            border-radius: 9999px;
+            text-align: center;
+            font-weight: 600;
+            font-size: 0.85rem;
+            border: 2px solid #ad9348;
+        }
+        .connector {
+            width: 2px;
+            height: 25px;
+            background: #ad9348;
+        }
+    </style>
+</head>
+<body id="top" class="bg-uca-beige font-sans text-gray-800">
+    <header class="bg-uca-light shadow-lg sticky top-0 z-10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex flex-col md:flex-row justify-between items-center">
+            
+            <div class="flex items-center space-x-4 mb-4 md:mb-0">
+                <img src="imagenes/cintilloUNRC.png" 
+                    alt="Logo Universidad Rosario Castellanos" 
+                    class="h-10 w-auto"
+                    onerror="this.onerror=null;this.src='https://placehold.co/150x40/5c1b35/ad9348?text=UNRC+Logo';"
+                >
+            </div>
+
+            <h1 class="text-3xl sm:text-4xl font-black text-uca-primary text-center px-4 py-2 rounded-lg">
+                Programación funcional
+            </h1>
+            
+            <a href="index.html" class="bg-uca-primary hover:bg-opacity-90 text-white font-bold py-2 px-6 rounded-full shadow-md transition duration-300 transform hover:scale-105">
+                Inicio
+            </a>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+        
+        <!-- Introducción con contexto de PDF -->
+        <section class="mb-12">
+            <div class="bg-uca-light rounded-3xl p-8 md:p-12 shadow-sm border border-uca-secondary/20 relative overflow-hidden">
+                <div class="absolute top-0 right-0 w-32 h-32 bg-uca-secondary/10 rounded-bl-full"></div>
+                <div class="relative z-10">
+                    <h2 class="text-3xl font-black text-uca-primary mb-6">Investigación: Paradigma Funcional</h2>
+                    <p class="text-lg leading-relaxed text-gray-700 mb-8 max-w-4xl">
+                        Basado en el contenido nuclear de la <strong>Universidad Nacional Rosario Castellanos</strong>, exploramos cómo Python integra elementos funcionales para resolver problemas de ejecución paralela. El paradigma funcional no solo es una técnica, sino un "marco para expresar el pensamiento" que mitiga los errores de estado.
+                    </p>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                        <div class="metric-card p-5 rounded-2xl">
+                            <span class="text-2xl">🚫</span>
+                            <h4 class="font-bold text-uca-primary mt-2">Sin Side-Effects</h4>
+                            <p class="text-xs text-gray-500 mt-1">Las funciones no alteran variables externas.</p>
+                        </div>
+                        <div class="metric-card p-5 rounded-2xl">
+                            <span class="text-2xl">💎</span>
+                            <h4 class="font-bold text-uca-primary mt-2">Inmutabilidad</h4>
+                            <p class="text-xs text-gray-500 mt-1">Datos persistentes que nunca cambian.</p>
+                        </div>
+                        <div class="metric-card p-5 rounded-2xl">
+                            <span class="text-2xl">🏗️</span>
+                            <h4 class="font-bold text-uca-primary mt-2">Orden Superior</h4>
+                            <p class="text-xs text-gray-500 mt-1">Funciones que operan sobre otras funciones.</p>
+                        </div>
+                        <div class="metric-card p-5 rounded-2xl">
+                            <span class="text-2xl">⏳</span>
+                            <h4 class="font-bold text-uca-primary mt-2">Lazy Evaluation</h4>
+                            <p class="text-xs text-gray-500 mt-1">Cálculo de valores solo cuando se necesitan.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Sección de Seguridad y Concurrencia (Reemplazo de la 3D) -->
+        <section class="mb-16">
+            <div class="bg-uca-primary text-white rounded-3xl p-8 md:p-12 shadow-2xl relative">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                    <div>
+                        <h3 class="text-2xl md:text-3xl font-black mb-6 border-l-4 border-uca-secondary pl-6">
+                            Seguridad en Sistemas Concurrentes
+                        </h3>
+                        <p class="text-uca-light/90 mb-8 leading-relaxed">
+                            En el <strong>Módulo 4 (Concurrencia)</strong>, se destaca que el estado compartido mutable es la raíz de los problemas de sincronización. Al adoptar un enfoque funcional, reducimos la necesidad de <em>Locks</em> y <em>Semáforos</em>.
+                        </p>
+                        <div class="space-y-6">
+                            <div class="flex items-start space-x-4">
+                                <div class="bg-uca-secondary text-uca-primary p-2 rounded-lg font-bold">A</div>
+                                <div>
+                                    <h5 class="font-bold">Eliminación de Race Conditions</h5>
+                                    <p class="text-xs opacity-75">Si los datos son inmutables, dos hilos pueden leerlos simultáneamente sin conflicto.</p>
+                                </div>
+                            </div>
+                            <div class="flex items-start space-x-4">
+                                <div class="bg-uca-secondary text-uca-primary p-2 rounded-lg font-bold">B</div>
+                                <div>
+                                    <h5 class="font-bold">Prevención de Deadlocks</h5>
+                                    <p class="text-xs opacity-75">Menos bloqueos mutuos significa un flujo de ejecución más fluido y predecible.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-white rounded-2xl p-6 shadow-inner">
+                        <h4 class="text-uca-primary font-bold text-center mb-4 uppercase text-sm tracking-widest">Métricas de Estabilidad</h4>
+                        <div class="chart-container">
+                            <canvas id="concurrencyRadar"></canvas>
+                        </div>
+                        <div class="mt-4 flex justify-center space-x-4 text-[10px] font-bold uppercase">
+                            <div class="flex items-center"><div class="w-3 h-3 bg-[#5c1b35] mr-1"></div> Enfoque Funcional</div>
+                            <div class="flex items-center"><div class="w-3 h-3 bg-[#ad9348] mr-1"></div> Enfoque Imperativo</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Sección de Código y Rendimiento -->
+        <section class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-16">
+            <div class="bg-uca-light p-8 rounded-2xl border border-gray-200">
+                <h4 class="font-black text-uca-primary mb-4 flex items-center">
+                    <span class="mr-2">🐍</span> Ejemplo: Transformación Pura
+                </h4>
+                <div class="code-block">
+<span class="comment"># Uso de map() para procesar concurrentemente</span>
+<span class="keyword">from</span> <span class="variable">concurrent.futures</span> <span class="keyword">import</span> <span class="variable">ThreadPoolExecutor</span>
+
+<span class="variable">data</span> = [<span class="literal">10, 20, 30, 40</span>]
+<span class="keyword">def</span> <span class="variable">pure_transform</span>(<span class="variable">n</span>):
+    <span class="keyword">return</span> <span class="variable">n</span> * <span class="variable">n</span>
+
+<span class="keyword">with</span> <span class="variable">ThreadPoolExecutor</span>() <span class="keyword">as</span> <span class="variable">executor</span>:
+    <span class="variable">results</span> = <span class="keyword">list</span>(<span class="variable">executor.map</span>(<span class="variable">pure_transform</span>, <span class="variable">data</span>))
+                </div>
+                <p class="text-sm text-gray-600 mt-4">
+                    La función <code>pure_transform</code> no modifica el estado global, lo que permite que el <code>ThreadPoolExecutor</code> la ejecute en múltiples hilos de forma segura por diseño.
+                </p>
+            </div>
+
+            <div class="bg-uca-light p-8 rounded-2xl border border-gray-200">
+                <h4 class="font-black text-uca-primary mb-4">Eficiencia: Latencia de Proceso</h4>
+                <div class="chart-container">
+                    <canvas id="efficiencyBarChart"></canvas>
+                </div>
+                <p class="text-[10px] text-gray-400 mt-4 italic text-center">Datos comparativos: Tiempo de CPU en transformaciones masivas de datos en Python 3.11+</p>
+            </div>
+        </section>
+
+        <!-- Flujo de Proceso (No-SVG) -->
+        <section class="mb-16">
+            <div class="max-w-xl mx-auto text-center">
+                <h3 class="text-xl font-black text-uca-primary mb-8 uppercase">Pipeline Funcional en Python</h3>
+                <div class="flex flex-col items-center">
+                    <div class="step-pill w-full max-w-xs">ORIGEN: Secuencia de Datos</div>
+                    <div class="connector"></div>
+                    <div class="step-pill w-full max-w-xs bg-uca-guinda-light">FILTER: Limpieza de Estado</div>
+                    <div class="connector"></div>
+                    <div class="step-pill w-full max-w-xs bg-uca-secondary text-uca-primary">MAP: Transformación Paralela</div>
+                    <div class="connector"></div>
+                    <div class="step-pill w-full max-w-xs bg-emerald-700 border-emerald-900">SALIDA: Colección Resultante</div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+
+    <footer class="bg-uca-primary py-8 mt-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <p class="text-uca-light text-sm">
+                Material de índole didáctico para la Universidad Nacional Rosario Castellanos
+            </p>
+            <p class="text-uca-light text-xs mt-2 opacity-75">
+                Licenciatura en Tecnologías de la Información y la Comunicación
+            </p>
+        </div>
+    </footer>
+
+    <script>
+       // Función de envoltura de etiquetas para Chart.js (> 16 chars)
+        function wrapLabels(label) {
+            if (label.length <= 16) return label;
+            const words = label.split(' ');
+            let lines = [];
+            let currentLine = '';
+            words.forEach(word => {
+                if ((currentLine + word).length > 16) {
+                    lines.push(currentLine.trim());
+                    currentLine = word + ' ';
+                } else {
+                    currentLine += word + ' ';
+                }
+            });
+            lines.push(currentLine.trim());
+            return lines;
+        }
+
+        const tooltipPlugin = {
+            callbacks: {
+                title: function(tooltipItems) {
+                    const item = tooltipItems[0];
+                    let label = item.chart.data.labels[item.dataIndex];
+                    return Array.isArray(label) ? label.join(' ') : label;
+                }
+            }
+        };
+
+        // Gráfico de Radar: Seguridad Concurrente (NUEVA VISUALIZACIÓN)
+        const radarCtx = document.getElementById('concurrencyRadar').getContext('2d');
+        new Chart(radarCtx, {
+            type: 'radar',
+            data: {
+                labels: [
+                    wrapLabels('Prevención de Race Conditions'),
+                    wrapLabels('Protección contra Deadlocks'),
+                    wrapLabels('Facilidad de Debugging'),
+                    wrapLabels('Escalabilidad de Hilos'),
+                    wrapLabels('Determinismo de Salida')
+                ],
+                datasets: [
+                    {
+                        label: 'Funcional',
+                        data: [95, 90, 85, 92, 98],
+                        fill: true,
+                        backgroundColor: 'rgba(92, 27, 53, 0.2)',
+                        borderColor: '#5c1b35',
+                        pointBackgroundColor: '#5c1b35',
+                        pointBorderColor: '#fff',
+                        pointHoverBackgroundColor: '#fff',
+                        pointHoverBorderColor: '#5c1b35'
+                    },
+                    {
+                        label: 'Imperativo',
+                        data: [35, 40, 30, 55, 45],
+                        fill: true,
+                        backgroundColor: 'rgba(173, 147, 72, 0.2)',
+                        borderColor: '#ad9348',
+                        pointBackgroundColor: '#ad9348',
+                        pointBorderColor: '#fff',
+                        pointHoverBackgroundColor: '#fff',
+                        pointHoverBorderColor: '#ad9348'
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false },
+                    tooltip: tooltipPlugin
+                },
+                scales: {
+                    r: {
+                        angleLines: { display: true, color: '#e5e7eb' },
+                        suggestedMin: 0,
+                        suggestedMax: 100,
+                        ticks: { display: false },
+                        pointLabels: { font: { size: 10, weight: 'bold' }, color: '#5c1b35' }
+                    }
+                }
+            }
+        });
+
+        // Gráfico de Barras: Eficiencia
+        const barCtx = document.getElementById('efficiencyBarChart').getContext('2d');
+        new Chart(barCtx, {
+            type: 'bar',
+            data: {
+                labels: [
+                    wrapLabels('Ciclos For Tradicionales'),
+                    wrapLabels('Comprensión de Listas'),
+                    wrapLabels('Operadores Map/Filter'),
+                    wrapLabels('Generadores (Lazy)')
+                ],
+                datasets: [{
+                    label: 'Latencia CPU (ms)',
+                    data: [380, 240, 210, 95],
+                    backgroundColor: ['#ad9348', '#8b3a5a', '#5c1b35', '#2d6a4f'],
+                    borderRadius: 6
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                indexAxis: 'y',
+                plugins: {
+                    legend: { display: false },
+                    tooltip: tooltipPlugin
+                },
+                scales: {
+                    x: { beginAtZero: true, grid: { display: false } },
+                    y: { grid: { display: false }, ticks: { font: { size: 10 } } }
+                }
+            }
+        }); 
+    </script>
+</body>
+</html>

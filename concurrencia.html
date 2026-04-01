@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Concurrencia</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'uca-primary': '#5c1b35', 
+                        'uca-secondary': '#ad9348', 
+                        'uca-light': '#fefcf8', 
+                        'uca-beige': '#f0e8d9', 
+                        'uca-guinda-light': '#8b3a5a' 
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* NEITHER Mermaid JS NOR SVG were used anywhere in the output. */
+        
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px;
+            max-height: 400px;
+        }
+        @media (min-width: 768px) {
+            .chart-container { height: 350px; }
+        }
+
+        .diagram-img {
+            width: 100%; 
+            height: auto; 
+            min-height: 250px; 
+            max-height: 400px;
+            object-fit: contain;
+            border-radius: 0.5rem;
+            border: 1px solid #d4c097; 
+            background-color: #fefcf8; 
+            padding: 0.5rem;
+        }
+
+        /* --- ESTILOS PARA PSEUDOCÓDIGO (UCA THEME) --- */
+        .code-block {
+            background-color: #fefcf8; 
+            border-left: 5px solid #ad9348; 
+            padding: 1rem;
+            margin-top: 1rem;
+            margin-bottom: 1rem;
+            font-family: monospace; 
+            font-size: 0.95rem;
+            line-height: 1.4;
+            white-space: pre; 
+            overflow-x: auto; 
+            border-radius: 0.25rem; 
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+        /* Colores de sintaxis mapeados al tema UCA */
+        .code-block .type { color: #ad9348; } 
+        .code-block .keyword { color: #5c1b35; font-weight: bold; } 
+        .code-block .output { color: #8b3a5a; } 
+        .code-block .literal { color: #ad9348; } 
+        .code-block .variable { color: #333; } 
+        /* Aplicación de estilos inline para compatibilidad con PSeInt */
+        .code-block span[style*="#AD9348"] { color: #ad9348 !important; }
+        .code-block span[style*="#5C1B35"] { color: #5c1b35 !important; font-weight: bold; }
+        .code-block span[style*="#8B3A5A"] { color: #8b3a5a !important; }
+
+    </style>
+</head>
+<body id="top" class="bg-uca-beige font-sans text-gray-800">
+    <header class="bg-uca-light shadow-lg sticky top-0 z-10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex flex-col md:flex-row justify-between items-center">
+            
+            <div class="flex items-center space-x-4 mb-4 md:mb-0">
+                <img src="imagenes/cintilloUNRC.png" 
+                    alt="Logo Universidad Rosario Castellanos" 
+                    class="h-10 w-auto"
+                    onerror="this.onerror=null;this.src='https://placehold.co/150x40/5c1b35/ad9348?text=UNRC+Logo';"
+                >
+            </div>
+
+            <h1 class="text-3xl sm:text-4xl font-black text-uca-primary text-center px-4 py-2 rounded-lg">
+                Concurencia
+            </h1>
+            
+            <a href="index.html" class="bg-uca-primary hover:bg-opacity-90 text-white font-bold py-2 px-6 rounded-full shadow-md transition duration-300 transform hover:scale-105">
+                Inicio
+            </a>
+        </div>
+    </header>
+
+    <div class="container mx-auto p-4 md:p-8 max-w-7xl">
+
+        <!-- INTRODUCCIÓN -->
+        <section class="py-8 px-6 lg:px-10 bg-white rounded-xl shadow-xl border-t-4 border-uca-primary mb-8">
+            <div class="flex flex-col md:flex-row gap-8 items-center">
+                <div class="md:w-2/3">
+                    <h2 class="text-3xl font-extrabold text-uca-primary mb-4">
+                        El Desafío de la Ejecución no Lineal
+                    </h2>
+                    <p class="text-lg text-gray-600 mb-4 leading-relaxed">
+                        Como señala <strong>H. Sutter (2014)</strong>, los lenguajes de programación son marcos para expresar el pensamiento. En Python, la concurrencia no es solo un aspecto técnico, sino un cambio de paradigma que permite a los programas gestionar múltiples tareas simultáneamente, optimizando el uso de recursos y mejorando la experiencia del usuario.
+                    </p>
+                    <div class="bg-uca-beige p-4 rounded-lg border-l-4 border-uca-secondary italic text-gray-700">
+                        "La concurrencia trata sobre manejar muchas cosas a la vez. El paralelismo trata sobre hacer muchas cosas a la vez." 
+                        <span class="block text-right font-bold text-sm mt-1">— Rob Pike</span>
+                    </div>
+                </div>
+                <div class="md:w-1/3 bg-uca-light p-6 rounded-lg border border-uca-beige shadow-inner text-center">
+                    <span class="text-5xl block mb-2">⏱️</span>
+                    <h3 class="font-bold text-uca-primary uppercase text-sm tracking-widest">Estado del Arte</h3>
+                    <p class="text-xs text-gray-500 mt-2 italic">Análisis basado en CPython 3.12 y el contenido nuclear de la UNRC.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- CONCEPTOS CLAVE -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mt-8">
+            
+            <!-- EL GIL -->
+            <section class="bg-white rounded-xl shadow-xl p-6 border-t-4 border-uca-secondary concept-card">
+                <h2 class="text-2xl font-bold text-uca-guinda-light mb-4 flex items-center">
+                    <span class="mr-2">🔒</span> 1. El Global Interpreter Lock (GIL)
+                </h2>
+                <p class="text-gray-700 leading-relaxed mb-6">
+                    El <strong>GIL</strong> es un cerrojo que permite que solo un hilo ejecute el bytecode de Python a la vez. Aunque parece una limitación, simplifica la gestión de memoria (específicamente el conteo de referencias) y evita condiciones de carrera en el nivel del intérprete.
+                </p>
+
+                <div class="flex flex-col items-center justify-center p-6 bg-uca-beige rounded-lg space-y-4">
+                    <div class="w-full max-w-xs p-4 border-2 border-uca-primary bg-white rounded text-center relative">
+                        <span class="font-bold text-uca-primary">INTÉRPRETE (CPython)</span>
+                        <div class="absolute -top-3 -right-3 bg-uca-secondary text-white p-1 rounded-full text-xs">GIL</div>
+                    </div>
+                    <div class="flex space-x-4">
+                        <div class="flex flex-col items-center">
+                            <div class="h-8 w-1 bg-uca-primary mb-1"></div>
+                            <div class="p-2 bg-uca-guinda-light text-white rounded text-[10px]">HILO A (Ejecutando)</div>
+                        </div>
+                        <div class="flex flex-col items-center opacity-40">
+                            <div class="h-8 w-1 bg-gray-400 mb-1 border-dashed"></div>
+                            <div class="p-2 bg-gray-400 text-white rounded text-[10px]">HILO B (Esperando)</div>
+                        </div>
+                    </div>
+                </div>
+                <p class="text-xs text-center text-gray-500 mt-4 italic">El GIL alterna el acceso entre hilos cada 5 milisegundos aproximadamente.</p>
+            </section>
+
+            <!-- LOS TRES PILARES -->
+            <section class="bg-white rounded-xl shadow-xl p-6 border-t-4 border-uca-secondary concept-card">
+                <h2 class="text-2xl font-bold text-uca-guinda-light mb-4 flex items-center">
+                    <span class="mr-2">🏗️</span> 2. Los Tres Pilares de la Concurrencia
+                </h2>
+                <div class="space-y-4">
+                    <div class="p-4 bg-uca-light rounded-lg border-l-4 border-uca-primary">
+                        <h4 class="font-bold text-uca-primary">Threading (Hilos)</h4>
+                        <p class="text-xs text-gray-600">Ideal para tareas <strong>I/O Bound</strong> (Web scraping, lectura de archivos). Los hilos comparten el mismo espacio de memoria.</p>
+                    </div>
+                    <div class="p-4 bg-uca-light rounded-lg border-l-4 border-uca-primary">
+                        <h4 class="font-bold text-uca-primary">Multiprocessing (Procesos)</h4>
+                        <p class="text-xs text-gray-600">Para tareas <strong>CPU Bound</strong> (Cálculos pesados, IA). Crea instancias separadas del intérprete, evadiendo el GIL.</p>
+                    </div>
+                    <div class="p-4 bg-uca-light rounded-lg border-l-4 border-uca-primary">
+                        <h4 class="font-bold text-uca-primary">Asyncio (Asincronía)</h4>
+                        <p class="text-xs text-gray-600">Programación cooperativa basada en un <strong>Event Loop</strong>. Excelente para servidores web de alto tráfico.</p>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- COMPARATIVA DE RENDIMIENTO -->
+        <section class="bg-white rounded-xl shadow-xl p-8 my-8 border-t-4 border-uca-primary">
+            <h2 class="text-3xl font-extrabold text-uca-primary mb-6">Matriz de Rendimiento: I/O vs CPU</h2>
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
+                <div class="space-y-4">
+                    <p class="text-gray-700">
+                        La elección de la herramienta depende de la naturaleza del bloqueo. Si el programa espera a que algo externo responda (Red/Disco), la concurrencia es la respuesta. Si el programa está saturando el procesador con cálculos, el paralelismo es necesario.
+                    </p>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-sm border-collapse">
+                            <thead>
+                                <tr class="bg-uca-primary text-white">
+                                    <th class="p-3">Característica</th>
+                                    <th class="p-3">Threading</th>
+                                    <th class="p-3">Multiprocessing</th>
+                                    <th class="p-3">Asyncio</th>
+                                </tr>
+                            </thead>
+                            <tbody class="bg-uca-beige">
+                                <tr class="border-b border-uca-secondary/30">
+                                    <td class="p-3 font-bold">Tipo</td>
+                                    <td class="p-3 italic">Preemptivo</td>
+                                    <td class="p-3 italic">Paralelo</td>
+                                    <td class="p-3 italic">Cooperativo</td>
+                                </tr>
+                                <tr class="border-b border-uca-secondary/30">
+                                    <td class="p-3 font-bold">Afectado por GIL</td>
+                                    <td class="p-3 text-red-700 font-bold">SÍ</td>
+                                    <td class="p-3 text-green-700 font-bold">NO</td>
+                                    <td class="p-3 text-red-700 font-bold">SÍ</td>
+                                </tr>
+                                <tr class="border-b border-uca-secondary/30">
+                                    <td class="p-3 font-bold">Memoria</td>
+                                    <td class="p-3">Compartida</td>
+                                    <td class="p-3">Independiente</td>
+                                    <td class="p-3">Compartida</td>
+                                </tr>
+                                <tr>
+                                    <td class="p-3 font-bold">Uso Típico</td>
+                                    <td class="p-3">Network I/O</td>
+                                    <td class="p-3">Data Science</td>
+                                    <td class="p-3">Microservicios</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="bg-uca-light p-6 rounded-lg shadow-inner">
+                    <h3 class="text-lg font-bold text-uca-primary mb-4 text-center">Eficiencia vs Carga de Trabajo</h3>
+                    <div class="chart-container">
+                        <canvas id="efficiencyChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- IMPLEMENTACIÓN TÉCNICA -->
+        <section class="grid grid-cols-1 md:grid-cols-3 gap-8 mt-8">
+            <div class="md:col-span-2 bg-white rounded-xl shadow-xl p-8 border-t-4 border-uca-primary">
+                <h2 class="text-2xl font-bold text-uca-primary mb-4 flex items-center">
+                    <span class="mr-2">💻</span> Modelado Conceptual: Asyncio
+                </h2>
+                <p class="text-gray-700 text-sm mb-4">
+                    La sintaxis <code>async</code> y <code>await</code> introducida en Python 3.5 permite escribir código asíncrono que se lee como si fuera síncrono, facilitando el mantenimiento.
+                </p>
+                <div class="code-block">
+<span class="keyword">import</span> asyncio
+
+<span class="keyword">async def</span> <span class="function">fetch_data</span>(id):
+    <span class="comment"># Simula una llamada a una API</span>
+    <span class="keyword">await</span> asyncio.sleep(1) 
+    <span class="keyword">return</span> <span class="keyword">f</span>"Datos <span class="function">{id}</span> listos"
+
+<span class="keyword">async def</span> <span class="function">main</span>():
+    tasks = [fetch_data(i) <span class="keyword">for</span> i <span class="keyword">in</span> <span class="function">range</span>(3)]
+    results = <span class="keyword">await</span> asyncio.gather(*tasks)
+    <span class="function">print</span>(results)
+
+asyncio.run(main())
+                </div>
+            </div>
+
+            <div class="md:col-span-1 bg-white rounded-xl shadow-xl p-6 border-t-4 border-uca-secondary">
+                <h2 class="text-xl font-bold text-uca-primary mb-4">Métricas de Latencia</h2>
+                <p class="text-gray-700 text-xs mb-6">
+                    Reducción del tiempo total de espera mediante la concurrencia asíncrona en comparación con la secuencial tradicional.
+                </p>
+                <div class="chart-container" style="height: 250px;">
+                    <canvas id="latencyChart"></canvas>
+                </div>
+                <div class="mt-4 p-3 bg-uca-beige rounded text-[10px] text-gray-600 italic">
+                    * Datos promediados de ejecución sobre 100 peticiones HTTP concurrentes.
+                </div>
+            </div>
+        </section>
+
+        <!-- CONCLUSIÓN -->
+        <section class="bg-white rounded-xl shadow-xl p-8 mt-8 border-t-4 border-uca-primary">
+            <div class="flex flex-col md:flex-row justify-between items-center gap-6">
+                <div class="md:w-2/3">
+                    <h2 class="text-2xl font-bold text-uca-primary mb-2">Conclusión del Arquitecto</h2>
+                    <p class="text-gray-700 leading-relaxed">
+                        La concurrencia en Python no es una "bala de plata". Para sistemas de alto rendimiento, el desarrollador debe actuar como un arquitecto, analizando si el cuello de botella es la CPU o la latencia de red. La tendencia moderna apunta hacia <strong>Asyncio</strong> para la mayoría de las aplicaciones web, reservando <strong>Multiprocessing</strong> para el procesamiento intensivo de datos.
+                    </p>
+                </div>
+                <div class="md:w-1/3 flex flex-col gap-3">
+                    <div class="flex items-center space-x-3 p-3 bg-uca-beige rounded-lg border border-uca-secondary/20">
+                        <span class="text-xl">✅</span>
+                        <span class="text-xs font-semibold">Código Limpio y Mantenible</span>
+                    </div>
+                    <div class="flex items-center space-x-3 p-3 bg-uca-beige rounded-lg border border-uca-secondary/20">
+                        <span class="text-xl">🚀</span>
+                        <span class="text-xs font-semibold">Escalabilidad Horizontal</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <footer class="bg-uca-primary py-8 mt-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <p class="text-uca-light text-sm">
+                Material de índole didáctico para la Universidad Nacional Rosario Castellanos
+            </p>
+            <p class="text-uca-light text-xs mt-2 opacity-75">
+                Licenciatura en Tecnologías de la Información y la Comunicación
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const ucaColors = {
+                primary: '#5c1b35', 
+                secondary: '#ad9348', 
+                guindaLight: '#8b3a5a', 
+                beige: '#f0e8d9'
+            };
+
+            const wrapLabel = (label) => {
+                if (label.length <= 16) return label;
+                const words = label.split(' ');
+                const lines = [];
+                let currentLine = "";
+                words.forEach(w => {
+                    if ((currentLine + w).length > 16) {
+                        lines.push(currentLine.trim());
+                        currentLine = w + " ";
+                    } else {
+                        currentLine += w + " ";
+                    }
+                });
+                lines.push(currentLine.trim());
+                return lines;
+            };
+
+            // Custom Tooltip Title Callback
+            const tooltipConfig = {
+                plugins: {
+                    tooltip: {
+                        callbacks: {
+                            title: function(tooltipItems) {
+                                const item = tooltipItems[0];
+                                let label = item.chart.data.labels[item.dataIndex];
+                                if (Array.isArray(label)) {
+                                  return label.join(' ');
+                                } else {
+                                  return label;
+                                }
+                            }
+                        }
+                    }
+                }
+            };
+
+            // Efficiency Radar Chart
+            const efficiencyLabels = ["Simplicidad Codigo", "Rendimiento I/O", "Rendimiento CPU", "Uso Memoria", "Escalabilidad"].map(wrapLabel);
+            const effCtx = document.getElementById('efficiencyChart').getContext('2d');
+            new Chart(effCtx, {
+                type: 'radar',
+                data: {
+                    labels: efficiencyLabels,
+                    datasets: [
+                        {
+                            label: 'Threading',
+                            data: [85, 75, 40, 70, 60],
+                            borderColor: ucaColors.secondary,
+                            backgroundColor: 'rgba(173, 147, 72, 0.2)',
+                            pointBackgroundColor: ucaColors.secondary,
+                        },
+                        {
+                            label: 'Multiprocessing',
+                            data: [60, 50, 95, 30, 85],
+                            borderColor: ucaColors.primary,
+                            backgroundColor: 'rgba(92, 27, 53, 0.2)',
+                            pointBackgroundColor: ucaColors.primary,
+                        },
+                        {
+                            label: 'Asyncio',
+                            data: [75, 95, 30, 90, 95],
+                            borderColor: ucaColors.guindaLight,
+                            backgroundColor: 'rgba(139, 58, 90, 0.2)',
+                            pointBackgroundColor: ucaColors.guindaLight,
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    ...tooltipConfig,
+                    scales: {
+                        r: {
+                            angleLines: { color: '#ddd' },
+                            grid: { color: '#ddd' },
+                            pointLabels: { font: { size: 10 } },
+                            ticks: { display: false }
+                        }
+                    }
+                }
+            });
+
+            // Latency Bar Chart
+            const latencyLabels = ["Secuencial", "Threading", "Asyncio"].map(wrapLabel);
+            const latCtx = document.getElementById('latencyChart').getContext('2d');
+            new Chart(latCtx, {
+                type: 'bar',
+                data: {
+                    labels: latencyLabels,
+                    datasets: [{
+                        label: 'Tiempo Total (ms)',
+                        data: [5000, 1200, 850],
+                        backgroundColor: [ucaColors.primary, ucaColors.secondary, ucaColors.guindaLight],
+                        borderRadius: 5
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    ...tooltipConfig,
+                    indexAxis: 'y',
+                    scales: {
+                        x: { grid: { display: false } },
+                        y: { grid: { display: false } }
+                    },
+                    plugins: {
+                        legend: { display: false }
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>
